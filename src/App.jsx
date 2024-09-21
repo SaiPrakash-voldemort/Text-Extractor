@@ -1,47 +1,45 @@
 import React, { useState } from 'react';
-import Tesseract from 'tesseract.js';
+import { handleImageOCR, handlePDFParsing, handleDocxParsing } from './utils/fileParsers';
 import FileUploader from './components/FileUploader';
+import './App.css';
 
 const App = () => {
   const [text, setText] = useState('');
   const [loading, setLoading] = useState(false);
-  const [progress, setProgress] = useState(0);
 
-  const handleDrop = (files) => {
+  const handleDrop = async (files) => {
     const file = files[0];
-    if (file) {
-      setLoading(true);
-      Tesseract.recognize(
-        file,
-        'eng',
-        {
-          logger: (m) => {
-            if (m.status === 'recognizing text') {
-              setProgress(Math.round(m.progress * 100));
-            }
-          },
-        }
-      ).then(({ data: { text } }) => {
-        setText(text);
-        setLoading(false);
-      });
+    if (!file) return;
+    
+    setLoading(true);
+    const fileType = file.type;
+
+    try {
+      let extractedText = '';
+
+      if (fileType.includes('image')) {
+        extractedText = await handleImageOCR(file);
+      } else if (fileType === 'application/pdf') {
+        extractedText = await handlePDFParsing(file);
+      } else if (fileType.includes('wordprocessingml.document')) {
+        extractedText = await handleDocxParsing(file);
+      } else {
+        extractedText = 'Unsupported file type. Please upload images, PDFs, or Word documents.';
+      }
+
+      setText(extractedText);
+    } catch (error) {
+      setText('Error extracting text from file.');
     }
+
+    setLoading(false);
   };
 
   return (
     <div className="App">
-      <h1>Handwritten and Printed Document Text Recognition</h1>
+      <h1>Text Recognition for Different Files</h1>
       <FileUploader onDrop={handleDrop} />
-      {loading ? (
-        <div>
-          <p>Processing... {progress}%</p>
-        </div>
-      ) : (
-        <div>
-          <h3>Extracted Text:</h3>
-          <p>{text}</p>
-        </div>
-      )}
+      {loading ? <p>Processing...</p> : <p>{text}</p>}
     </div>
   );
 };
