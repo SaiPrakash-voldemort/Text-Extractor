@@ -18,7 +18,6 @@ Features
     Image Text Extraction: Supports OCR for image files like JPEG, PNG, etc.
     Word Document Parsing: Extracts text from .docx files.
     PDF Parsing: Extracts text from .pdf files.
-    Excel Parsing: Extracts text from .xlsx files (if needed).
 
 Tech Stack
 
@@ -193,3 +192,4 @@ Future Enhancements
 
     Add support for other file formats like .xlsx (Excel files) using SheetJS.
     Improve error handling and display more meaningful messages for unsupported file types.
+    Add a backend service using officeparser or similar libraries for more precise and reliable text extraction from various document types (such as .docx, .pptx, .xlsx). This will allow for better processing of complex files and handling of larger datasets.
