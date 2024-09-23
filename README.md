@@ -7,7 +7,10 @@ Currently, two official plugins are available:
 - [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
 - [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
 
-Text Recognition App
+Text Recognition App 
+
+Hosted On Netlify
+Live link :https://textextracter.netlify.app/
 
 This is a Text Recognition App built using ReactJS that supports extracting text from different types of files such as images (using Tesseract), Word documents (using Mammoth.js), and PDFs (using PDF.js).
 Features

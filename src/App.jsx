@@ -41,10 +41,11 @@ const App = () => {
   };
 
   return (
-    <div className="App bg-slate-800 w-full h-screen flex flex-col gap-4 items-center p-5 text-white font-semibold font-serif">
-      <h1 className="text-2xl m-2 p-2 text-center sm:text-4xl">
+    <div className="flex flex-col items-center w-full h-screen gap-4 p-5 font-serif font-semibold text-white App bg-slate-900">
+      <h1 className="p-2 m-2 text-2xl text-center sm:text-4xl">
         Text Recognition for Different Files
       </h1>
+      <p>(Currently It Supports Images,Word and Pdf format files only)</p>
       <FileUploader onDrop={handleDrop} />
       {loading ? <p>Processing...</p> : <p>{text}</p>}
     </div>
