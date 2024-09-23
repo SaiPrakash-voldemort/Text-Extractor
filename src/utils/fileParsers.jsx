@@ -1,6 +1,9 @@
 import mammoth from 'mammoth';
 import Tesseract from 'tesseract.js';
-import { PDFDocument } from 'pdf-lib';
+import * as pdfjsLib from 'pdfjs-dist/build/pdf';
+
+// Manually set the worker path
+pdfjsLib.GlobalWorkerOptions.workerSrc = `https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.10.377/pdf.worker.min.js`;
 
 export const handleImageOCR = (file) => {
   return new Promise((resolve, reject) => {
@@ -12,14 +15,17 @@ export const handleImageOCR = (file) => {
 };
 
 export const handlePDFParsing = async (file) => {
-  const buffer = await file.arrayBuffer();
-  const pdfDoc = await PDFDocument.load(buffer);
-  const pages = pdfDoc.getPages();
+  const loadingTask = pdfjsLib.getDocument(URL.createObjectURL(file));
+
+  const pdf = await loadingTask.promise;
   let extractedText = '';
 
-  pages.forEach((page) => {
-    extractedText += page.getTextContent();
-  });
+  for (let i = 1; i <= pdf.numPages; i++) {
+    const page = await pdf.getPage(i);
+    const textContent = await page.getTextContent();
+    const pageText = textContent.items.map(item => item.str).join(' ');
+    extractedText += pageText;
+  }
 
   return extractedText;
 };
